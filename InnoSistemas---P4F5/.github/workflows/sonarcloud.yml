@@ -1,12 +1,15 @@
 # sonarcloud.yml - Configuración para análisis con SonarCloud
-name: SonarCloud
+name: SonarCloud analysis
 
 on:
   push:
-    branches:
-      - master
+    branches: [ "master" ]
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  pull-requests: read
 
 jobs:
   build:
@@ -15,7 +18,8 @@ jobs:
 
     steps:
       # Clonar el repositorio
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # necesario para que SonarCloud analice todo el historial
 
@@ -35,7 +39,7 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
 
       # Build del proyecto con Maven
-      - name: Build with Maven
+      - name: Build and test
         run: mvn -B clean verify
 
       # Análisis con SonarCloud
