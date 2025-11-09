@@ -1,3 +1,4 @@
+# Actualización para forzar re-ejecución del workflow
 name: SonarCloud
 on:
   push:
